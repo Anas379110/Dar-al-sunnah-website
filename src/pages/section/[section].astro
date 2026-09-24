@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCard from '../../components/BookCard.astro';
+import { getPublishableBooks, getAllSections, filterBySection } from '../../lib/sunnah';
+
+export async function getStaticPaths() {
+  return getAllSections().map((section) => ({ params: { section } }));
+}
+
+const { section } = Astro.params;
+const filtered = filterBySection(getPublishableBooks(), section ?? '');
+---
+<BaseLayout title={`قسم ${section}`}>
+  <h1 class="text-2xl font-bold mb-6">قسم {section}</h1>
+  {filtered.length === 0 ? (
+    <p class="opacity-60">لا توجد كتب بهذا القسم بعد.</p>
+  ) : (
+    <div class="grid gap-4 md:grid-cols-2">
+      {filtered.map((book) => <BookCard book={book} />)}
+    </div>
+  )}
+</BaseLayout>

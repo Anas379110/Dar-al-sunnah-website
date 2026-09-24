@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { books } from '../../data/books';
+import { isValidForPublish } from '../../lib/sunnah';
+
+export async function getStaticPaths() {
+  return books.map((book) => ({ params: { slug: book.slug } }));
+}
+
+const { slug } = Astro.params;
+const book = books.find((b) => b.slug === slug);
+const ready = book ? isValidForPublish(book) : false;
+---
+<BaseLayout title={book?.title ?? 'كتاب'}>
+  {!book || !ready ? (
+    <div class="text-center py-16 bg-white/50 rounded-lg">
+      <p class="text-lg mb-2">هذا الكتاب قيد الإعداد حاليًا.</p>
+      <p class="text-sm opacity-70">
+        {book?.hasMadhhabDispute && !book?.madhhabNote
+          ? 'يحتوي مسائل خلافية بين المذاهب — بانتظار نسب المذهب لكل قول قبل النشر.'
+          : 'الملخص قيد المراجعة البشرية قبل النشر.'}
+      </p>
+    </div>
+  ) : (
+    <article>
+      <span class="text-xs text-brand font-medium">{book.section}</span>
+      <h1 class="text-3xl font-bold mt-2 mb-1">{book.title}</h1>
+      <p class="opacity-70 mb-6">{book.author}</p>
+
+      <div class="bg-white rounded-lg p-4 border border-brand/20 mb-4">
+        <h2 class="font-bold mb-2">ملخص</h2>
+        <p class="text-sm leading-relaxed">{book.summary}</p>
+      </div>
+
+      {book.hasMadhhabDispute && book.madhhabNote && (
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 text-sm">
+          <strong>ملاحظة نسب المذهب:</strong> {book.madhhabNote}
+        </div>
+      )}
+
+      <p class="text-xs opacity-60 mb-4">
+        حالة المحتوى: {book.licenseStatus === 'فهرس_فقط' ? 'فهرس فقط' : 'ملخص فقط'} — لا نص كامل متاح على هذا الموقع.
+      </p>
+
+      <div class="text-sm text-neutral-600">
+        <strong>المصادر:</strong>
+        <ul class="list-disc list-inside">
+          {book.sources.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+    </article>
+  )}
+</BaseLayout>

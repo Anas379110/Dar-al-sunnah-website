@@ -1,0 +1,17 @@
+---
+import type { Book } from '../data/types';
+
+export interface Props {
+  book: Book;
+}
+const { book } = Astro.props;
+---
+<a href={`/book/${book.slug}`} class="block border border-brand/30 rounded-lg p-4 bg-white hover:shadow-md transition-shadow">
+  <div class="flex items-center justify-between">
+    <span class="text-xs text-brand font-medium">{book.section}</span>
+    {book.hasMadhhabDispute && <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded">خلاف فقهي منسوب</span>}
+  </div>
+  <h3 class="text-lg font-bold mt-1 mb-1">{book.title}</h3>
+  <p class="text-sm opacity-70 mb-2">{book.author}</p>
+  <p class="text-sm">{book.summary}</p>
+</a>

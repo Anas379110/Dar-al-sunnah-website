@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookCard from '../components/BookCard.astro';
+import { getPublishableBooks, getAllSections } from '../lib/sunnah';
+
+const books = getPublishableBooks();
+const sections = getAllSections();
+---
+<BaseLayout title="الرئيسية">
+  <h1 class="text-2xl font-bold mb-2 text-center">دار السنة</h1>
+  <p class="text-center text-sm mb-6 opacity-80">كتالوج حديث وفقه — فهرس وملخص مُراجَع بشريًا لكل كتاب</p>
+
+  <div class="flex flex-wrap gap-2 mb-6 justify-center">
+    <a href="/" class="text-xs px-3 py-1 rounded-full bg-brand text-white">الكل</a>
+    {sections.map((s) => (
+      <a href={`/section/${encodeURIComponent(s)}`} class="text-xs px-3 py-1 rounded-full bg-white border border-brand/30 hover:bg-brand/10">
+        {s}
+      </a>
+    ))}
+  </div>
+
+  {books.length === 0 ? (
+    <p class="text-center opacity-60">لا توجد كتب منشورة بعد.</p>
+  ) : (
+    <div class="grid gap-4 md:grid-cols-2">
+      {books.map((book) => <BookCard book={book} />)}
+    </div>
+  )}
+</BaseLayout>
