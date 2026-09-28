@@ -17,11 +17,11 @@ const srcset = `${src}.webp 1x, ${src}@2x.webp 2x, ${src}.jpg 1x, ${src}@2x.jpg 
 ---
 
 <img
-  src={${src}.webp}
-  srcset={${srcset}}
-  alt={${alt}}
-  width={${width}}
-  height={${height}}
+  src={`${src}.webp`}
+  srcset={srcset}
+  alt={alt}
+  width={width}
+  height={height}
   class={${cls}}
   loading="lazy"
   decoding="async"

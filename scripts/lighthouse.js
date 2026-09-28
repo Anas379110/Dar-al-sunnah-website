@@ -3,6 +3,11 @@
 // then check if the score is >= 90.0.  If not we exit with
 // a non‑zero code so the CI fails.
 
+import lighthouse from 'lighthouse';
+import chromeLauncher from 'chrome-launcher';
+import path from 'path';
+import fs from 'fs';
+
 async function run(url, outDir) {
   const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless', '--no-sandbox'] });
   const options = {
